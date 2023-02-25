@@ -1,7 +1,17 @@
 version: '2.1'
 orbs:
   terraform: circleci/terraform@3.1
+  aws-cli: circleci/aws-cli@2.0.6
+
 jobs:
+  aws-cli-cred-setup:
+    executor: aws-cli/default
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_REGION
+
   terraform-job:
     executor: terraform/default
     steps:
@@ -19,7 +29,18 @@ jobs:
       - terraform/destroy:
           path: ./ebs
     working_directory: ~/circleci
+  job-2:
+    docker:
+      - image: cimg/python:3.11.2
+    steps:
+      - checkout
+      - run: python --version
+      - run: ehco "This is job 2"
+      - run: pwd
 workflows:
   single-job-lifecycle:
     jobs:
+      - aws-cli-cred-setup:
+          context: aws
       - terraform-job
+      - job-2
