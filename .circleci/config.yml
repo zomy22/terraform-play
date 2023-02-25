@@ -7,18 +7,18 @@ jobs:
     steps:
       - checkout
       - terraform/init:
-          path: .
+          path: ~/ebs
       - terraform/validate:
-          path: .
+          path: ~/ebs
       - terraform/fmt:
-          path: .
+          path: ~/ebs
       - terraform/plan:
-          path: .
+          path: ~/ebs
       - terraform/apply:
-          path: .
+          path: ~/ebs
       - terraform/destroy:
-          path: .
-    working_directory: ~/ebs
+          path: ~/ebs
+    working_directory: /root
 workflows:
   single-job-lifecycle:
     jobs:
