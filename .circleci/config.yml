@@ -50,4 +50,6 @@ workflows:
       - aws-cli-cred-setup:
           context: aws
       - terraform-job
+          requires:
+            - aws-cli-cred-setup
       - job-3
