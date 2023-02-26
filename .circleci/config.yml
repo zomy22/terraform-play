@@ -7,6 +7,7 @@ jobs:
   aws-cli-cred-setup:
     executor: aws-cli/default
     steps:
+      - run: echo "testing!"
       - aws-cli/setup:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
@@ -29,18 +30,24 @@ jobs:
       - terraform/destroy:
           path: ./ebs
     working_directory: ~/circleci
-  job-2:
+  job-3:
     docker:
       - image: cimg/python:3.11.2
     steps:
       - checkout
-      - run: python --version
-      - run: ehco "This is job 2"
-      - run: pwd
+      - run: 
+          name: check python version
+          command: python --version
+      - run: 
+          name: run random echo command
+          command: echo "This is job 2"
+      - run: 
+          name: print working dir 
+          command: echo $(pwd)
 workflows:
   single-job-lifecycle:
     jobs:
       - aws-cli-cred-setup:
           context: aws
       - terraform-job
-      - job-2
+      - job-3
