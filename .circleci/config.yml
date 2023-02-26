@@ -44,12 +44,28 @@ jobs:
       - run: 
           name: print working dir 
           command: echo $(pwd)
+  job-4:
+    docker:
+      - image: cimg/python:3.11.2
+    steps:
+      - checkout
+      - run: 
+          name: check python version
+          command: python --version
+      - run: 
+          name: run random echo command
+          command: echo "This is job 2"
+      - run: 
+          name: print working dir 
+          command: echo $(pwd)
 workflows:
   single-job-lifecycle:
     jobs:
       - aws-cli-cred-setup:
           context: aws
       - terraform-job
-          requires:
-            - aws-cli-cred-setup
       - job-3
+      - job-4:
+          requires:
+            - job-3
+
